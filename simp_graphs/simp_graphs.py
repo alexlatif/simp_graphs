@@ -51,8 +51,8 @@ class AxisThreshold(BaseModel):
         arbitrary_types_allowed = True
 
 class AxisTrace(BaseModel):
-    x: pd.Series | np.ndarray | typing.Literal["minmax"]
-    y: pd.Series | np.ndarray | typing.Literal["minmax"]
+    x: typing.Union[pd.Series, np.ndarray, typing.Literal["minmax"]]
+    y: typing.Union[pd.Series, np.ndarray, typing.Literal["minmax"]]
     x_axis_id: str = "default"
     y_axis_id: str = "default"
     thresholds: list[AxisThreshold] = Field(default_factory=list)
@@ -63,7 +63,7 @@ class AxisTrace(BaseModel):
     line_width: float = 3
     point_size: float = 3
     point_shape: str = "circle"
-    color_override: CSS_COLORS | None = None
+    color_override: typing.Union[CSS_COLORS, None] = None
     # hide_points: bool = False
     # fill_area: bool = False
     # hoverable: bool = True
@@ -94,7 +94,7 @@ class AxisGraph(BaseModel):
     y_axes: dict[str, Axis] = Field(default_factory=dict)
     x_label: str = ""
     y_label: str = ""
-    smoothing_config: int | None = None
+    smoothing_config: typing.Union[int, None] = None
 
     color_gradient_axis_title: str = ""
     # color_gradient_type: AxisGradientType_T = "raw"
@@ -107,9 +107,9 @@ class AxisGraph(BaseModel):
 
 
 class SimpGraph(BaseModel):
-    unbuilt_graphs: dict[str, AxisGraph | BarGraph] = {}
+    unbuilt_graphs: dict[str, typing.Union[AxisGraph, BarGraph]] = {}
 
-    def add(self, graph: AxisGraph | BarGraph, name: str):
+    def add(self, graph: typing.Union[AxisGraph, BarGraph], name: str):
         assert name not in self.unbuilt_graphs, "Graph name already exists"
         assert isinstance(graph, AxisGraph) or isinstance(
             graph, BarGraph
